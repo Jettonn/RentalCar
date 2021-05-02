@@ -1,0 +1,10 @@
+/
+/Login
+/Register
+/Admin
+/Admin/CreateNewCar
+/Admin/Cars
+/Admin/Update
+/Admin/Reservations
+/User
+/User/CarDetails
