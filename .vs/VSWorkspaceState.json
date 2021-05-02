@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\RentalCar",
+    "\\RentalCar\\Controllers",
     "\\RentalCar\\Properties",
     "\\RentalCar\\Views"
   ],

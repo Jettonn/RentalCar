@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -7,6 +8,7 @@ using ViewModels;
 
 namespace Controllers
 {
+   [Authorize]
    public class VehicleController : Controller
    {
       private readonly DataContext _context;
@@ -29,6 +31,7 @@ namespace Controllers
       {
          var vehicle = await _context.Vehicles
             .Include(v => v.Ratings)
+               .ThenInclude(r => r.User)
             .FirstOrDefaultAsync(v => v.Id == vehicleId);
 
          if (vehicle is null)
@@ -40,6 +43,7 @@ namespace Controllers
       }
 
       [HttpPost]
+      [Authorize(Roles = "Admin")]
       public async Task<IActionResult> Create(VehicleViewModel vehicleViewModel)
       {
          if (ModelState.IsValid)
@@ -69,6 +73,7 @@ namespace Controllers
       }
 
       [HttpPost("{vehicleId}")]
+      [Authorize(Roles = "Admin")]
       public async Task<IActionResult> Edit(int vehicleId, VehicleViewModel vehicleViewModel)
       {
          if (ModelState.IsValid)
@@ -102,6 +107,7 @@ namespace Controllers
       }
 
       [HttpPost("{vehicleId}")]
+      [Authorize(Roles = "Admin")]
       public async Task<IActionResult> Delete(int vehicleId)
       {
          var vehicle = await _context.Vehicles

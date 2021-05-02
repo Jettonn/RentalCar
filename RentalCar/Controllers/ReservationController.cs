@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -8,6 +10,7 @@ using ViewModels;
 
 namespace Controllers
 {
+   [Authorize]
    public class ReservationController : Controller
    {
       private readonly DataContext _context;
@@ -48,10 +51,23 @@ namespace Controllers
       {
          if (ModelState.IsValid)
          {
+            // Get latest reservation
+            var latestReservation = await _context.Reservations
+                  .OrderByDescending(r => r.Id)
+                  .Take(1)
+                  .FirstAsync();
+
+            // Check if dates collide
+            if (reservationViewModel.ReservedFrom.ToUniversalTime().CompareTo(latestReservation.ReservedTo.ToUniversalTime()) < 0)
+            {
+               ModelState.AddModelError(string.Empty, $"This vehicle is already reserved. Please specify a date later than '{latestReservation.ReservedTo.ToUniversalTime().ToShortDateString()}'");
+               return View();
+            }
+
             var reservation = new Reservation
             {
-               ReservedFrom = reservationViewModel.ReservedFrom,
-               ReservedTo = reservationViewModel.ReservedTo,
+               ReservedFrom = reservationViewModel.ReservedFrom.ToUniversalTime(),
+               ReservedTo = reservationViewModel.ReservedTo.ToUniversalTime(),
                VehicleId = reservationViewModel.VehicleId,
                UserId = reservationViewModel.UserId,
                DeliveryAddress = reservationViewModel.DeliveryAddress,
@@ -70,6 +86,7 @@ namespace Controllers
          return View();
       }
 
+      [Authorize(Roles = "Admin")]
       [HttpPost("{reservationId}")]
       public async Task<IActionResult> Edit(int reservationId, ReservationEditViewModel reservationViewModel)
       {
@@ -85,7 +102,7 @@ namespace Controllers
                return RedirectToAction("Index");
             }
 
-            if (reservationViewModel.ReservedTo != null && reservation.ReservedTo != default)
+            if (reservation.ReservedTo.ToUniversalTime().CompareTo(DateTime.UtcNow) > 0)
             {
                reservation.ReservedTo = reservationViewModel.ReservedTo;
             }
@@ -111,6 +128,7 @@ namespace Controllers
          return View();
       }
 
+      [Authorize(Roles = "Admin")]
       [HttpPost("{reservationId}")]
       public async Task<IActionResult> Delete(int reservationId)
       {

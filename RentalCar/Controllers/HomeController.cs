@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
+using Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RentalCar.Models;
 
@@ -12,11 +15,11 @@ namespace RentalCar.Controllers
 {
    public class HomeController : Controller
    {
-      private readonly ILogger<HomeController> _logger;
+      private readonly DataContext _context;
 
-      public HomeController(ILogger<HomeController> logger)
+      public HomeController(DataContext context)
       {
-         _logger = logger;
+         this._context = context;
       }
 
       public IActionResult Index()
@@ -30,15 +33,32 @@ namespace RentalCar.Controllers
          return View();
       }
 
-      public IActionResult Privacy()
+      [Authorize]
+      public async Task<IActionResult> Filter(string mark, int seats, int transmission, double priceFrom, double priceTo)
       {
-         return View();
-      }
+         var vehicles = _context.Vehicles.AsQueryable();
 
-      [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-      public IActionResult Error()
-      {
-         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+         if (!string.IsNullOrEmpty(mark))
+         {
+            vehicles = vehicles.Where(v => v.Mark.Contains(mark));
+         }
+
+         if (seats >= 1 && seats <= 6)
+         {
+            vehicles = vehicles.Where(v => v.Seats == seats);
+         }
+
+         if (transmission >= 0 && transmission <= 3)
+         {
+            vehicles = vehicles.Where(v => (int)v.Transmission == transmission);
+         }
+
+         if (priceFrom > 0 && priceTo > priceFrom)
+         {
+            vehicles = vehicles.Where(v => v.Price >= priceFrom && v.Price <= priceTo);
+         }
+
+         return View(await vehicles.ToListAsync());
       }
    }
 }
