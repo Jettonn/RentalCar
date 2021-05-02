@@ -1,8 +1,295 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Rent a Car";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@* <style>
+    .browser-mockup {
+    border-top: 2em solid rgba(230, 230, 230, 0.7);
+    position: relative;
+    height: 60vh;
+    }
+
+    .browser-mockup:before {
+    display: block;
+    position: absolute;
+    content: "";
+    top: -1.25em;
+    left: 1em;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background-color: #f44;
+    box-shadow: 0 0 0 2px #f44, 1.5em 0 0 2px #9b3, 3em 0 0 2px #fb5;
+    }
+
+    .browser-mockup>* {
+    display: block;
+    }
+    </style> *@
+<style>
+    .flex-column {
+        max-width: 260px;
+    }
+
+    img {
+        margin: 5px;
+    }
+
+    .scale {
+        transform: scaleY(1.05);
+        padding-top: 5px;
+    }
+
+    @@importurl("https://fonts.googleapis.com/css?family=Montserrat:600");
+
+    .header__main {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .slider {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: absolute;
+        width: 100%;
+    }
+
+    .slide:target .slide__bg {
+        opacity: 1;
+    }
+
+    .slide:target .slide__image {
+        transform: translate(0);
+        opacity: 1;
+        transition-delay: 0.5s;
+        filter: blur(0) drop-shadow(0px 10px 30px rgba(0, 0, 0, 0.35));
+    }
+
+    .slide__bg {
+        position: absolute;
+        z-index: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(2);
+        filter: blur(50px);
+        opacity: 0;
+        transition: opacity 1s ease;
+        will-change: opacity;
+    }
+
+    .slide__images {
+        position: relative;
+        width: 100%;
+        max-width: 900px;
+        height: 365px;
+        margin: 0 20px;
+    }
+
+    .slide__image {
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        transition: all 0.5s ease-in-out 0s;
+        filter: blur(10px) drop-shadow(0px 10px 30px rgba(0, 0, 0, 0.35));
+        will-change: transform, opacity, filter;
+    }
+
+    .slide__image svg {
+        display: block;
+    }
+
+    .slide__image--left {
+        transform: translate(0.75%, -10px);
+    }
+
+    .slide__image--right {
+        top: 5vmin;
+        transform: translate(-0.75%, 10px);
+    }
+
+    .slider__pagination {
+        position: absolute;
+        bottom: 7vh;
+        width: 100%;
+        text-align: center;
+    }
+
+    .button {
+        position: relative;
+        display: inline-block;
+        padding: 20px 40px;
+        border: 2px solid #fff;
+        line-height: 1;
+        font: 600 12px "Montserrat", sans-serif;
+        text-align: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: white;
+        transition: all 0.25s ease;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .button:hover {
+        color: #333;
+        background-color: white;
+    }
+</style>
+<div class="container mx-auto">
+    <div class="text-center px-3 lg:px-0">
+        <h1 class="my-4 text-2xl md:text-3xl lg:text-5xl font-black leading-tight mb-6">
+            <span class="block xl:inline">Keep calm and</span>
+            <span class="block text-blue-500 xl:inline">rent a car</span>
+        </h1>
+
+        <a class="mx-auto lg:mx-0 hover:text-blue-600 text-gray-800 font-extrabold rounded my-2 md:my-6 py-4 px-8 shadow-lg
+    w-48" href="/Account/Register">
+            Sign Up
+        </a>
+        <a href="#" class="inline-block mx-auto lg:mx-0 hover:text-blue-600 hover:no-underline bg-transparent text-gray-600
+    font-extrabold my-2 md:my-6 py-2 lg:py-4 px-8">View
+            Cars</a>
+    </div>
+
 </div>
+
+<div class="container-fluid mb-7 mt-6 px-0">
+    <header class="header__main">
+        <div class="slider">
+            <svg class="slider__mask" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 1920 1080" width="0" height="0">
+                <defs>
+                    <!-- Slide 1 -->
+                    <pattern id="bg1" patternUnits="userSpaceOnUse" width="1920" height="1080" viewBox="0 0 1920 1080">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1550355291-bbee04a92027?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80"
+                            width="100%" height="100%" />
+                    </pattern>
+                    <pattern id="pattern1l" patternUnits="userSpaceOnUse" width="562" height="366"
+                        viewBox="0 0 562 366">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1550355291-bbee04a92027?dpr=1&auto=format&fit=crop&w=600&h=600&q=80&cs=tinysrgb&crop=&bg="
+                            width="600px" height="600px" />
+                    </pattern>
+                    <pattern id="pattern1r" patternUnits="userSpaceOnUse" x="365px" width="562" height="366"
+                        viewBox="0 0 562 366">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1590362891991-f776e747a588?dpr=1&auto=format&fit=crop&w=600&h=600&q=80&cs=tinysrgb&crop=&bg="
+                            width="600px" height="600px" />
+                    </pattern>
+
+                    <!-- Slide 2 -->
+                    <pattern id="bg2" patternUnits="userSpaceOnUse" width="1920" height="1080" viewBox="0 0 1920 1080">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1502877338535-766e1452684a?dpr=1&auto=format&fit=crop&w=2000&h=2000&q=80&cs=tinysrgb&crop=&bg="
+                            width="100%" height="100%" />
+                    </pattern>
+                    <pattern id="pattern2l" patternUnits="userSpaceOnUse" width="562" height="366"
+                        viewBox="0 0 562 366">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1604505298512-2356bb171174?dpr=1&auto=format&fit=crop&w=600&h=600&q=80&cs=tinysrgb&crop=&bg="
+                            width="600px" height="600px" />
+                    </pattern>
+                    <pattern id="pattern2r" patternUnits="userSpaceOnUse" x="365" width="562" height="366"
+                        viewBox="0 0 562 366">
+                        <image
+                            xlink:href="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?dpr=1&auto=format&fit=crop&w=600&h=600&q=80&cs=tinysrgb&crop=&bg="
+                            width="600px" height="600px" />
+                    </pattern>
+                </defs>
+            </svg>
+
+            <div class="slide" id="slide-1">
+                <svg class="slide__bg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1920" height="1080">
+                    <rect x="0" y="0" width="1920" height="1080" fill="url(#bg1)" />
+                </svg>
+                <div class="slide__images">
+                    <div class="slide__image slide__image--left">
+                        <svg viewBox="0 0 900 365" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" x="0px" y="0px">
+                            <path d="M 0 0 L 0 365 L 351.2382 365 L 562 0 L 0 0 Z" fill="url(#pattern1l)" />
+                        </svg>
+                    </div>
+
+                    <div class="slide__image slide__image--right">
+                        <svg viewBox="0 0 900 365" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" x="0px" y="0px">
+                            <path d="M 900 365 L 900 0 L 548.7618 0 L 338 365 L 900 365 Z" fill="url(#pattern1r)" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide" id="slide-2">
+                <svg class="slide__bg" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1920" height="1080">
+                    <rect x="0" y="0" width="1920" height="1080" fill="url(#bg2)" />
+                </svg>
+                <div class="slide__images">
+                    <div class="slide__image slide__image--left">
+                        <svg viewBox="0 0 900 365" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" x="0px" y="0px">
+                            <path d="M 0 0 L 0 365 L 351.2382 365 L 562 0 L 0 0 Z" fill="url(#pattern2l)" />
+                        </svg>
+                    </div>
+
+                    <div class="slide__image slide__image--right">
+                        <svg viewBox="0 0 900 365" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" x="0px" y="0px">
+                            <path d="M 900 365 L 900 0 L 548.7618 0 L 338 365 L 900 365 Z" fill="url(#pattern2r)" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider__pagination">
+                <a href="#slide-1" class="button">Cars 1</a>
+                <a href="#slide-2" class="button">Cars 2</a>
+            </div>
+    </header>
+</div>
+<footer class="container text-gray-600 px-6 lg:px-8 mt-16">
+    <div class="max-w-screen-xl mx-auto flex flex-col items-center mt-7">
+        <div class="flex items-center space-x-2">
+            <a href="https://www.facebook.com" class="hover:text-gray-200">
+                <span class="sr-only">Facebook</span>
+                <svg class="h-6 w-6 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+            <a href="https://www.instagram.com" class="hover:text-gray-200">
+                <span class="sr-only">Instagram</span>
+                <svg class="h-6 w-6 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+            <a href="https://www.twitter.com" class="hover:text-gray-200">
+                <span class="sr-only">Twitter</span>
+                <svg class="h-6 w-6 text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                </svg>
+            </a>
+        </div>
+        <div class="text-sm mt-4">
+            ©2020 Company. All rights reserved.
+        </div>
+    </div>
+</footer>
