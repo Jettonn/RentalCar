@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isLoggedIn = Context.User.Identity.IsAuthenticated;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -57,11 +61,23 @@
                         </div>
                     </div>
 
-                    <div
+                    @if (isLoggedIn)
+                    {
+                        <div
                         class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        <a class="bg-blue-500 text-white block px-3 py-2 rounded-md text-base font-medium"
+                            <a class="bg-blue-500 text-white block px-3 py-2 rounded-md text-base font-medium"
+                            asp-controller="Account" asp-action="Logout">Logout</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div
+                        class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                            <a class="bg-blue-500 text-white block px-3 py-2 rounded-md text-base font-medium"
                             asp-controller="Account" asp-action="Login">Login</a>
-                    </div>
+                        </div>
+                    }
+
 
                 </div>
             </div>

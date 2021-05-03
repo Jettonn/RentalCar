@@ -16,25 +16,25 @@
                         <label for="mark" class="block text-sm font-medium text-gray-700">Mark</label>
                         <input type="text" asp-for="Mark" id="mark" required
                             class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Mark"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Mark"></span>
                     </div>
                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                         <input type="text" asp-for="Name" id="name" required
                             class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Name"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Name"></span>
                     </div>
                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label for="seats" class="block text-sm font-medium text-gray-700">Seats</label>
                         <input type="number" asp-for="Seats" id="seats" required
                             class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Seats"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Seats"></span>
                     </div>
                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label for="horsePower" class="block text-sm font-medium text-gray-700">Horse Power</label>
                         <input type="number" asp-for="HorsePower" id="horsePower" required
                             class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
-                        <p class="text-red-500 text-xs italic" asp-validation-for="HorsePower"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="HorsePower"></span>
                     </div>
                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label for="transmission" class="block text-sm font-medium text-gray-700">Select transmission
@@ -44,13 +44,13 @@
                             asp-items="Html.GetEnumSelectList<VehicleTransmission>()">
                             <option selected="selected" value="">Please select</option>
                         </select>
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Transmission"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Transmission"></span>
                     </div>
                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                         <label for="price" class="block text-sm font-medium text-gray-700">Price (per day)</label>
                         <input type="number" asp-for="Price" id="price" required step="0.01"
                             class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Price"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Price"></span>
                     </div>
                     <div class="col-span-6">
                         <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
@@ -59,7 +59,7 @@
                         <p class="mt-2 text-sm text-gray-500">
                             Please provide an image URL for the vehicle.
                         </p>
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Name"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Name"></span>
                     </div>
                     <div class="col-span-6">
                         <label for="description" class="block text-sm font-medium text-gray-700">
@@ -73,7 +73,7 @@
                         <p class="mt-2 text-sm text-gray-500">
                             Brief description for vehicle.
                         </p>
-                        <p class="text-red-500 text-xs italic" asp-validation-for="Description"></p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="Description"></span>
                     </div>
                 </div>
             </div>

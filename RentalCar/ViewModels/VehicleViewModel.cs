@@ -7,7 +7,7 @@ namespace ViewModels
    {
       [Required]
       public string Mark { get; set; }
-      
+
       [Required]
       public string Name { get; set; }
 
@@ -19,7 +19,7 @@ namespace ViewModels
       public int HorsePower { get; set; }
 
       [Required]
-      [Range(1, 4)]
+      [Range(0, 3)]
       public VehicleTransmission Transmission { get; set; }
 
       public string Description { get; set; }

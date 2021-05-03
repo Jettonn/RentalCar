@@ -4,8 +4,9 @@
     "\\RentalCar",
     "\\RentalCar\\Controllers",
     "\\RentalCar\\Properties",
-    "\\RentalCar\\Views"
+    "\\RentalCar\\Views",
+    "\\RentalCar\\Views\\Vehicle"
   ],
-  "SelectedNode": "\\RentalCar\\Views\\_ViewStart.cshtml",
+  "SelectedNode": "\\RentalCar\\Views\\Vehicle\\Create.cshtml",
   "PreviewInSolutionExplorer": false
 }
