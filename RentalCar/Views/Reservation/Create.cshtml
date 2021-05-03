@@ -1,0 +1,64 @@
+@inject UserManager<Models.AppUser> UserManager
+@{
+    ViewData["Title"] = "Create new reservation";
+    var currentUserId = UserManager.GetUserId(Context.User);
+}
+@model ViewModels.ReservationViewModel;
+
+<div class="container mx-auto mt-4">
+    <form asp-controller="Reservation" asp-action="Create" method="post">
+        <div class="overflow-hidden sm:rounded-md">
+            <div class="px-4 py-2 bg-white sm:p-6">
+                <div class="grid grid-cols-6 gap-6">
+                    <div class="col-span-6">
+                        <h1 class="font-bold text-2xl mb-2">Create new reservation</h1>
+                    </div>
+                    <input type="hidden" asp-for="UserId" value="@currentUserId">
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label for="dateFrom" class="block text-sm font-medium text-gray-700">Reserved From</label>
+                        <input type="datetime-local" asp-for="ReservedFrom" id="dateFrom" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <span class="text-red-500 text-xs italic" asp-validation-for="ReservedFrom"
+                            id="reservedFrom"></span>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label for="dateTo" class="block text-sm font-medium text-gray-700">Reserved To</label>
+                        <input type="datetime-local" asp-for="ReservedTo" id="dateTo" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <span class="text-red-500 text-xs italic" asp-validation-for="ReservedTo"
+                            id="reservedTo"></span>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label for="deliveryAddress" class="block text-sm font-medium text-gray-700">Delivery
+                            Address</label>
+                        <input type="text" asp-for="DeliveryAddress" id="deliveryAddress" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="mt-2 text-sm text-gray-500">
+                            Enter delivery address if you want the vehicle to be delivered to you.
+                        </p>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="DeliveryAddress"></span>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-3">
+                        <label for="vehicle" class="block text-sm font-medium text-gray-700">Select vehicle</label>
+                        <select id="vehicle" asp-for="VehicleId" required
+                            class="mt-1 py-2.5 px-4 block w-full py-2 px-3 border border border-gray-300 bg-white rounded-md shadow-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option selected="selected" value="">Please select</option>
+                            @foreach (var vehicle in ViewBag.Vehicles)
+                            {
+                                <option value="@vehicle.Id">@vehicle.Mark @vehicle.Name</option>
+                            }
+                        </select>
+                        <span class="text-red-500 text-xs italic" asp-validation-for="VehicleId"></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="px-4 text-right sm:px-6">
+            <button type="submit"
+                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Save
+            </button>
+        </div>
+    </form>
+</div>
