@@ -1,23 +1,18 @@
 @inject UserManager<Models.AppUser> UserManager
-
 @{
-    ViewData["Title"] = "Vehicles";
+    ViewData["Title"] = "Reservations";
 
     var currentUser = await UserManager.GetUserAsync(Context.User);
     var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
 }
 
-@model List<Models.Vehicle>
-
 <div class="flex justify-between my-6">
-    <h1 class="font-bold text-2xl mb-2">Vehicles</h1>
-    @if (isAdmin)
-    {
-        <a href="/Vehicle/Create"
+    <h1 class="font-bold text-2xl mb-2">Reservations</h1>
+    <a href="/Reservation/Create"
         class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow-md hover:cursor">Add
-            new vehicle</a>
-    }
+        new reservation</a>
 </div>
+
 <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -27,23 +22,27 @@
                         <tr>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Mark
+                                #
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
+                                Reserved by
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Seats
+                                Reserved from
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Horse Power
+                                Reserved to
                             </th>
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Price
+                                Vehicle
+                            </th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Total
                             </th>
                             @if (isAdmin)
                             {
@@ -55,49 +54,52 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach (var vehicle in Model)
+                        @foreach (var reservation in Model)
                         {
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-12 w-12">
-                                            <img class="h-12 w-12 rounded-full" src="@vehicle.Image"
-                                            alt="@vehicle.Mark @vehicle.Name Image">
-                                        </div>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
-                                                <a href="/Vehicle/Details/@vehicle.Id"
-                                                class="text-gray-900">@vehicle.Mark</a>
+                                                <a href="/@reservation.Id"
+                                                class="text-gray-900">#@reservation.Id</a>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">@vehicle.Name</div>
+                                 <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.User.Name</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-gray-900">@vehicle.Seats seats</div>
+                                    <div class="text-sm text-gray-900">@reservation.ReservedFrom.ToString("dd/MM/yyyy hh:mm")</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    @vehicle.HorsePower hp
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.ReservedTo.ToString("dd/MM/yyyy hh:mm")</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    @vehicle.Price &euro;
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.Vehicle.Mark @reservation.Vehicle.Name</div>
                                 </td>
-                                @if (isAdmin)
-                                {
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="row">
-                                            <a href="/Vehicle/Edit/@vehicle.Id"
-                                        class="text-yellow-400 hover:text-yellow-800 mr-3">Edit</a>
-                                            <form asp-controller="Vehicle" asp-action="Delete" method="POST">
-                                                <input type="hidden" name="vehicleId" value="@vehicle.Id">
-                                                <button type="submit"
-                                            class="text-red-600 hover:text-red-900 font-medium">Remove</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                }
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @{
+                                        var total = @reservation.Vehicle.Price * @reservation.NumberOfDays;
+                                    }
+                                    <div class="text-sm text-gray-900">@total &euro;</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="row">
+                                        <a href="/EditReservation/@reservation.Id"
+                                    class="text-yellow-400 hover:text-yellow-800 mr-3">Edit</a>
+                                    @if (isAdmin)
+                                    {
+                                        <form asp-controller="Reservation" asp-action="Delete" method="POST">
+                                            <input type="hidden" name="reservationId" value="@reservation.Id">
+                                            <button type="submit"
+                                        class="text-red-600 hover:text-red-900 font-medium">Remove</button>
+                                        </form>
+                                    }
+                                    </div>
+                                </td>
+                                
                             </tr>
                         }
                     </tbody>
@@ -106,30 +108,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts{
-@* <script>
-    var DeleteVehicle = function (vehicleId) {
-    if (vehicleId != null) {
-    var result = confirm("Want to delete ingredient?");
-    if (result) {
-    $.ajax({
-    type: "POST",
-    url: "/Vehicle/Delete",
-    data: { vehicleId: vehicleId },
-    success: function (result) {
-    console.log("the recipe ingredient deleted");
-    setTimeout(() => {
-    location.reload();
-    }, 200);
-    },
-    error: function (xhr) {
-    alert('Ingredient could not be deleted due to an error in server!');
-    console.log(xhr);
-    }
-    });
-    }
-    }
-    };
-    </script> *@
-}
