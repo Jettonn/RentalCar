@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using ViewModels;
 
-namespace Controllers
+namespace RentalCar.Controllers
 {
-   public class VehicleController : Controller
+   public class VehicleController : BaseController
    {
       private readonly DataContext _context;
       public VehicleController(DataContext context)
@@ -25,7 +25,7 @@ namespace Controllers
          return View(vehicles);
       }
 
-      [HttpGet("/Details/{vehicleId}")]
+      [HttpGet("{vehicleId}")]
       public async Task<IActionResult> Details(int vehicleId)
       {
          var vehicle = await _context.Vehicles
@@ -70,14 +70,14 @@ namespace Controllers
 
             if (success)
             {
-               return RedirectToAction("Index", "Vehicle");
+               return RedirectToAction("Index");
             }
          }
 
          return View();
       }
 
-      [HttpGet("/Edit/{vehicleId}")]
+      [HttpGet("{vehicleId}")]
       public async Task<IActionResult> Edit(int vehicleId)
       {
          var vehicle = await _context.Vehicles
@@ -93,7 +93,7 @@ namespace Controllers
          return View(vehicle);
       }
 
-      [HttpPost("/Edit/{vehicleId}")]
+      [HttpPost("{vehicleId}")]
       [Authorize(Roles = "Admin")]
       public async Task<IActionResult> Edit(Vehicle vehicleViewModel)
       {

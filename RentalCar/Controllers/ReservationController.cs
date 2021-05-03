@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using ViewModels;
 
-namespace Controllers
+namespace RentalCar.Controllers
 {
    [Authorize]
-   public class ReservationController : Controller
+  
+   public class ReservationController : BaseController
    {
       private readonly DataContext _context;
       public ReservationController(DataContext context)

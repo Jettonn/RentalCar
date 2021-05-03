@@ -13,52 +13,53 @@ using RentalCar.Models;
 
 namespace RentalCar.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly DataContext _context;
+   public class HomeController : BaseController
+   {
+      private readonly DataContext _context;
 
-        public HomeController(DataContext context)
-        {
-            this._context = context;
-        }
+      public HomeController(DataContext context)
+      {
+         this._context = context;
+      }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+      public IActionResult Index()
+      {
+         return View();
+      }
 
-        [Authorize]
-        public IActionResult Main()
-        {
-            return View();
-        }
+      [Authorize]
+      [HttpGet("/")]
+      public IActionResult Main()
+      {
+         return View();
+      }
 
-        [Authorize]
-        public async Task<IActionResult> Filter(string mark, int seats, int transmission, double priceFrom, double priceTo)
-        {
-            var vehicles = _context.Vehicles.AsQueryable();
+      [Authorize]
+      public async Task<IActionResult> Filter(string mark, int seats, int transmission, double priceFrom, double priceTo)
+      {
+         var vehicles = _context.Vehicles.AsQueryable();
 
-            if (!string.IsNullOrEmpty(mark))
-            {
-                vehicles = vehicles.Where(v => v.Mark.Contains(mark));
-            }
+         if (!string.IsNullOrEmpty(mark))
+         {
+            vehicles = vehicles.Where(v => v.Mark.Contains(mark));
+         }
 
-            if (seats >= 1 && seats <= 6)
-            {
-                vehicles = vehicles.Where(v => v.Seats == seats);
-            }
+         if (seats >= 1 && seats <= 6)
+         {
+            vehicles = vehicles.Where(v => v.Seats == seats);
+         }
 
-            if (transmission >= 0 && transmission <= 3)
-            {
-                vehicles = vehicles.Where(v => (int)v.Transmission == transmission);
-            }
+         if (transmission >= 0 && transmission <= 3)
+         {
+            vehicles = vehicles.Where(v => (int)v.Transmission == transmission);
+         }
 
-            if (priceFrom > 0 && priceTo > priceFrom)
-            {
-                vehicles = vehicles.Where(v => v.Price >= priceFrom && v.Price <= priceTo);
-            }
+         if (priceFrom > 0 && priceTo > priceFrom)
+         {
+            vehicles = vehicles.Where(v => v.Price >= priceFrom && v.Price <= priceTo);
+         }
 
-            return View(await vehicles.ToListAsync());
-        }
-    }
+         return View(await vehicles.ToListAsync());
+      }
+   }
 }

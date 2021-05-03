@@ -15,7 +15,7 @@ using ViewModels;
 
 namespace RentalCar.Controllers
 {
-   public class AccountController : Controller
+   public class AccountController : BaseController
    {
       private readonly SignInManager<AppUser> _signInManager;
       private readonly UserManager<AppUser> _userManager;

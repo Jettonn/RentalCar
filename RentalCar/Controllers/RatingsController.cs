@@ -6,63 +6,63 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using ViewModels;
 
-namespace Controllers
+namespace RentalCar.Controllers
 {
-    [Authorize]
-    public class RatingsController : Controller
-    {
-        private readonly DataContext _context;
+   [Authorize]
+   public class RatingsController : BaseController
+   {
+      private readonly DataContext _context;
 
-        public RatingsController(DataContext context)
-        {
-            this._context = context;
-        }
+      public RatingsController(DataContext context)
+      {
+         this._context = context;
+      }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(RatingViewModel ratingViewModel)
-        {
-            if (ModelState.IsValid)
+      [HttpPost]
+      public async Task<IActionResult> Create(RatingViewModel ratingViewModel)
+      {
+         if (ModelState.IsValid)
+         {
+            var rating = new Rating
             {
-                var rating = new Rating
-                {
-                    UserId = ratingViewModel.UserId,
-                    VehicleId = ratingViewModel.VehicleId,
-                    RatingScore = ratingViewModel.RatingScore,
-                    Comment = ratingViewModel.Comment
-                };
+               UserId = ratingViewModel.UserId,
+               VehicleId = ratingViewModel.VehicleId,
+               RatingScore = ratingViewModel.RatingScore,
+               Comment = ratingViewModel.Comment
+            };
 
-                _context.Ratings.Add(rating);
-                var success = await _context.SaveChangesAsync() > 0;
-
-                if (success)
-                {
-                    return RedirectToAction("Index");
-                }
-            }
-
-            return View();
-        }
-
-        [HttpPost()]
-        public async Task<IActionResult> Delete(int ratingId)
-        {
-            var rating = await _context.Ratings
-                .FirstOrDefaultAsync(r => r.Id == ratingId);
-
-            if (rating is null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            _context.Ratings.Remove(rating);
+            _context.Ratings.Add(rating);
             var success = await _context.SaveChangesAsync() > 0;
 
             if (success)
             {
-                return RedirectToAction("Index");
+               return RedirectToAction("Details", "Vehicle", new { vehicleId = ratingViewModel.VehicleId });
             }
+         }
 
-            return View();
-        }
-    }
+         return View();
+      }
+
+      [HttpPost]
+      public async Task<IActionResult> Delete(int ratingId)
+      {
+         var rating = await _context.Ratings
+             .FirstOrDefaultAsync(r => r.Id == ratingId);
+
+         if (rating is null)
+         {
+            return RedirectToAction("Index", "Vehicle");
+         }
+
+         _context.Ratings.Remove(rating);
+         var success = await _context.SaveChangesAsync() > 0;
+
+         if (success)
+         {
+            return RedirectToAction("Details", "Vehicle", new { vehicleId = rating.VehicleId });
+         }
+
+         return View();
+      }
+   }
 }
