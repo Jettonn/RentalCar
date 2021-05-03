@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Vehicle Detail";
+}
+@model Models.Vehicle;
+@using Common;
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="bg-gray-100 w-full mt-5 backgroundImg"
+            style="background-image:url('@Model.Image'); background-position: center; background-repeat: no-repeat; background-size: cover; height:26rem;">
+        </div>
+    </div>
+    <div class="col-md-7 mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-4xl font-medium leading-5 mb-3">@Model.Mark @Model.Name</h3>
+            </div>
+            <div class="col-md-6 text-right">
+                <span
+                    class="inline-block rounded-full text-gray-900 bg-gray-100 px-2 py-1 text-lg font-bold mr-3">@Model.Price
+                    &euro;
+                    per day</span>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4">
+                <div class="card border-light shadow">
+                    <div class="card-body flex justify-between  align-items-center p-3">
+                        <p><i class="fas fa-car-side"></i></i>
+                        </p>
+                        <span
+                            class="inline-block rounded-full text-blue-600 bg-blue-100 px-2 py-1 text-sm font-bold mr-3">@Model.Seats
+                            seats</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-light shadow">
+                    <div class="card-body flex justify-between  align-items-center p-3">
+                        <p><i class="fas fa-tachometer-alt"></i></i>
+                        </p>
+                        <span
+                            class="inline-block rounded-full text-blue-600 bg-blue-100 px-2 py-1 text-sm font-bold mr-3">@Model.HorsePower
+                            hp</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-light shadow">
+                    <div class="card-body flex justify-between  align-items-center p-3">
+                        <p><i class="fas fa-cogs"></i></i>
+                        </p>
+                        @{
+                            var tranmissionName = (VehicleTransmission)@Model.Transmission;
+                        }
+                        <span
+                            class="inline-block rounded-full text-blue-600 bg-blue-100 px-2 py-1 text-sm font-bold mr-3">@tranmissionName.ToString()</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <h3 class="text-lg font-medium leading-5 mb-3">Description</h3>
+                <p>@Model.Description</p>
+            </div>
+        </div>
+    </div>
+</div>

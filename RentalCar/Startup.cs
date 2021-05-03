@@ -14,58 +14,60 @@ using Models;
 
 namespace RentalCar
 {
-   public class Startup
-   {
-      public Startup(IConfiguration configuration)
-      {
-         Configuration = configuration;
-      }
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
-      public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-      public void ConfigureServices(IServiceCollection services)
-      {
-         services.AddControllersWithViews();
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllersWithViews();
 
-         services.AddDbContext<DataContext>(options =>
-         options.UseMySql(Configuration["DBInfo:ConnectionString"]));
+            services.AddDbContext<DataContext>(options =>
+            options.UseMySql(Configuration["DBInfo:ConnectionString"]));
 
-         services.AddIdentity<AppUser, IdentityRole>(options =>
-         {
-            options.Password.RequiredLength = 8;
-         })
-          .AddEntityFrameworkStores<DataContext>()
-          .AddDefaultTokenProviders();
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+            })
+             .AddEntityFrameworkStores<DataContext>()
+             .AddDefaultTokenProviders();
 
-         services.ConfigureApplicationCookie(opts =>
-             {
-                opts.LoginPath = "/Account/Login";
-                opts.Cookie.Name = "RentalCarAuth";
-             });
-      }
+            services.ConfigureApplicationCookie(opts =>
+                {
+                    opts.LoginPath = "/Account/Login";
+                    opts.Cookie.Name = "RentalCarAuth";
+                });
+        }
 
-      public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-      {
-         if (env.IsDevelopment())
-         {
-            app.UseDeveloperExceptionPage();
-         }
-         else
-         {
-            app.UseExceptionHandler("/Home/Error");
-         }
-         app.UseStaticFiles();
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
-         app.UseRouting();
+            app.UseAuthentication();
+            app.UseStaticFiles();
 
-         app.UseAuthorization();
+            app.UseRouting();
 
-         app.UseEndpoints(endpoints =>
-         {
-            endpoints.MapControllerRoute(
-                   name: "default",
-                   pattern: "{controller=Home}/{action=Index}/{id?}");
-         });
-      }
-   }
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+        }
+    }
 }

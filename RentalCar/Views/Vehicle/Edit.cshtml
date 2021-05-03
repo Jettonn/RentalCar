@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Edit vehicle";
+}
+@model Models.Vehicle;
+@using Common;
+
+<div class="container mx-auto mt-4">
+    <form asp-controller="Vehicle" asp-action="Edit" method="post">
+        <div class="overflow-hidden sm:rounded-md">
+            <div class="px-4 py-2 bg-white sm:p-6">
+                <div class="grid grid-cols-6 gap-6">
+                    <div class="col-span-6">
+                        <h1 class="font-bold text-2xl mb-2">Edit vehicle</h1>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="mark" class="block text-sm font-medium text-gray-700">Mark</label>
+                        <input type="text" asp-for="Mark" id="mark" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Mark"></p>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" asp-for="Name" id="name" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Name"></p>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="seats" class="block text-sm font-medium text-gray-700">Seats</label>
+                        <input type="number" asp-for="Seats" id="seats" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Seats"></p>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="horsePower" class="block text-sm font-medium text-gray-700">Horse Power</label>
+                        <input type="number" asp-for="HorsePower" id="horsePower" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="text-red-500 text-xs italic" asp-validation-for="HorsePower"></p>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="transmission" class="block text-sm font-medium text-gray-700">Select transmission
+                            type</label>
+                        <select id="transmission" asp-for="Transmission" required
+                            class="mt-1 py-2.5 px-4 block w-full py-2 px-3 border border border-gray-300 bg-white rounded-md shadow-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            asp-items="Html.GetEnumSelectList<VehicleTransmission>()">
+                            <option selected="selected" value="">Please select</option>
+                        </select>
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Transmission"></p>
+                    </div>
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                        <label for="price" class="block text-sm font-medium text-gray-700">Price (per day)</label>
+                        <input type="number" asp-for="Price" id="price" required step="0.01"
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Price"></p>
+                    </div>
+                    <div class="col-span-6">
+                        <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
+                        <input type="text" asp-for="Image" id="image" required
+                            class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
+                        <p class="mt-2 text-sm text-gray-500">
+                            Please provide an image URL for the vehicle.
+                        </p>
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Name"></p>
+                    </div>
+                    <div class="col-span-6">
+                        <label for="description" class="block text-sm font-medium text-gray-700">
+                            Description
+                        </label>
+                        <div class="mt-1">
+                            <textarea id="description" asp-for="Description" rows="3"
+                                class="shadow-md py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
+                                placeholder="This vehicle was choosen as the best car of th year..."></textarea>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Brief description for vehicle.
+                        </p>
+                        <p class="text-red-500 text-xs italic" asp-validation-for="Description"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-4 text-right sm:px-6">
+                <button type="submit"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Update
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
