@@ -80,28 +80,25 @@ namespace RentalCar.Controllers
       {
          if (ModelState.IsValid)
          {
-            // ReservedTo is before ReservedFrom
+            // Validate if ReservedFrom and ReservedTo are future dates and ReservedTo is not earlier than ReservedFrom
             if (reservationViewModel.ReservedFrom.ToUniversalTime()
-               .CompareTo(reservationViewModel.ReservedTo.ToUniversalTime()) > 0)
+                    .CompareTo(reservationViewModel.ReservedTo.ToUniversalTime()) > 0 ||
+               reservationViewModel.ReservedFrom.ToUniversalTime()
+                    .CompareTo(DateTime.UtcNow) < 0 ||
+               reservationViewModel.ReservedTo.ToUniversalTime()
+                    .CompareTo(reservationViewModel.ReservedTo.ToUniversalTime()) < 0)
             {
-               ModelState.AddModelError(string.Empty, "Life can only be understood backwards; but it must be lived forwards. (i.e pick a future date for the reservation)");
+               ModelState.AddModelError(string.Empty, "Invalid date selected. Please pick a valid date range.");
 
                var vehicles = await _context.Vehicles.ToListAsync();
                ViewBag.Vehicles = vehicles;
                return View();
             }
 
-            // Get latest reservation
-            var latestReservation = await _context.Reservations
-                  .OrderByDescending(r => r.Id)
-                  .Take(1)
-                  .FirstAsync();
-
-            // Check if dates collide
-            if (reservationViewModel.ReservedFrom.ToUniversalTime()
-                .CompareTo(latestReservation.ReservedTo) < 0)
+            if (await IsTimeConflicting(reservationViewModel))
             {
-               ModelState.AddModelError(string.Empty, $"This vehicle is already reserved. Please specify a date later than '{latestReservation.ReservedTo.ToUniversalTime()}'");
+               ModelState.AddModelError(string.Empty,
+                $"This vehicle is already reserved for these dates. Please change the dates and retry again.");
 
                var vehicles = await _context.Vehicles.ToListAsync();
                ViewBag.Vehicles = vehicles;
@@ -128,6 +125,30 @@ namespace RentalCar.Controllers
          }
 
          return View();
+      }
+
+      [NonAction]
+      private async Task<bool> IsTimeConflicting(ReservationViewModel reservation)
+      {
+         var reservationSchedule = await _context
+            .Reservations.Where(r => r.UserId == reservation.UserId)
+            .ToListAsync();
+
+         // Check if start time is in range of any other reservation
+         if (reservationSchedule.Any(r => r.ReservedFrom.CompareTo(reservation.ReservedFrom) < 0 &&
+             r.ReservedTo.CompareTo(reservation.ReservedFrom) > 0))
+         {
+            return true;
+         }
+
+         // Check if end time is in range of any other reservation
+         if (reservationSchedule.Any(r => r.ReservedFrom.CompareTo(reservation.ReservedTo) < 0 &&
+             r.ReservedTo.CompareTo(reservation.ReservedTo) > 0))
+         {
+            return true;
+         }
+
+         return false;
       }
 
       [HttpGet("/EditReservation/{reservationId}")]
