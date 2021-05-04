@@ -47,6 +47,10 @@
                             @foreach (var vehicle in ViewBag.Vehicles)
                             {
                                 <option value="@vehicle.Id">@vehicle.Mark @vehicle.Name</option>
+                                @if (ViewBag.VehicleId > 0 && vehicle.Id == ViewBag.VehicleId)
+                                {
+                                    <option value="@ViewBag.VehicleId">@vehicle.Mark @vehicle.Name</option>
+                                }
                             }
                         </select>
                         <span class="text-red-500 text-xs italic" asp-validation-for="VehicleId"></span>

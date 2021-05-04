@@ -63,10 +63,20 @@
                 <h3 class="text-4xl font-medium leading-5 mb-3">@Model.Mark @Model.Name</h3>
             </div>
             <div class="col-md-6 text-right">
-                <a href="#"
-                    class="inline-flex justify-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+
+                @* <a href="#"
+                    class="inline-flex justify-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium
+                    rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                    focus:ring-blue-500">
                     Rent now
-                </a>
+                    </a> *@
+
+                <form asp-action="Create" asp-controller="Reservation" method="GET">
+                    <input type="hidden" name="VehicleId" value="@Model.Id" />
+                    <input type="submit"
+                        class="inline-flex justify-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        value="Reserve" />
+                </form>
             </div>
             <div class="col-md-12">
                 <span

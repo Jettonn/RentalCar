@@ -5,6 +5,8 @@
     var isAdmin = await UserManager.IsInRoleAsync(currentUser, "Admin");
 }
 @using Common;
+@model ViewModels.MainViewModel
+
 <div class="flex items-center">
     <div class="bg-white py-4 rounded w-full">
         <div class="flex justify-between my-2">
@@ -19,7 +21,7 @@
                             <p class="text-gray-500 font-semibold">Total Income</p>
                             <div class="flex items-baseline space-x-4">
                                 <h2 class="text-2xl font-semibold">
-                                    430 &euro;
+                                    @Math.Round(Model.TotalAmount, 2) &euro;
                                 </h2>
                             </div>
                         </div>
@@ -38,12 +40,12 @@
                         <p class="text-gray-500 font-semibold">Finished rentals</p>
                         <div class="flex items-baseline space-x-4">
                             <h2 class="text-2xl font-semibold">
-                                7
+                                @Model.FinishedRentalsCount
                             </h2>
                         </div>
                     </div>
                 </div>
-                <a href="/Reservation/Index"
+                <a href="/Reservation/Index?finished=true"
                     class="block p-3 text-lg font-semibold bg-blue-50 text-blue-800 hover:bg-blue-100 cursor-pointer">
                     View all
                 </a>
@@ -57,12 +59,12 @@
                         <p class="text-gray-500 font-semibold">Ongoing rentals</p>
                         <div class="flex items-baseline space-x-4">
                             <h2 class="text-2xl font-semibold">
-                                1
+                                @Model.OnGoingRentalsCount
                             </h2>
                         </div>
                     </div>
                 </div>
-                <a href="/Reservation/Index"
+                <a href="/Reservation/Index?ongoing=true"
                     class="block p-3 text-lg font-semibold bg-blue-50 text-blue-800 hover:bg-blue-100 cursor-pointer">
                     View all
                 </a>
@@ -76,12 +78,12 @@
                         <p class="text-gray-500 font-semibold">Upcoming rentals</p>
                         <div class="flex items-baseline space-x-4">
                             <h2 class="text-2xl font-semibold">
-                                3
+                                @Model.UpcomingRentalsCount
                             </h2>
                         </div>
                     </div>
                 </div>
-                <a href="/Reservation/Index"
+                <a href="/Reservation/Index?upcoming=true"
                     class="block p-3 text-lg font-semibold bg-blue-50 text-blue-800 hover:bg-blue-100 cursor-pointer">
                     View all
                 </a>
@@ -92,37 +94,37 @@
 <h2 class="text-xl my-3">
     Search Vehicles
 </h2>
-<form method="post">
+<form method="get" asp-action="Main" asp-controller="Home">
     <div class="overflow-hidden sm:rounded-md">
         <div class="py-2 bg-white">
             <div class="grid grid-cols-6 gap-6">
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                     <label for="mark" class="block text-sm font-medium text-gray-700">Mark</label>
-                    <input type="text" id="mark"
+                    <input type="text" id="mark" asp-for="Filters.Mark"
                         class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                     <label for="seats" class="block text-sm font-medium text-gray-700">Seats</label>
-                    <input type="number" id="seats" min="0" max="6"
+                    <input type="number" id="seats" min="0" max="6" asp-for="Filters.Seats"
                         class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                     <label for="transmission" class="block text-sm font-medium text-gray-700">Transmission
                         type</label>
-                    <select id="transmission"
+                    <select id="transmission" asp-for="Filters.Transmission"
                         class="mt-1 py-2.5 px-4 block w-full py-2 px-3 border border border-gray-300 bg-white rounded-md shadow-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         asp-items="Html.GetEnumSelectList<VehicleTransmission>()">
-                        <option selected="selected" value="">Select</option>
+                        <option selected="selected" value="-1">All</option>
                     </select>
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                     <label for="priceFrom" class="block text-sm font-medium text-gray-700">Price From</label>
-                    <input type="number" id="priceFrom" min="0" step="0.01"
+                    <input type="number" id="priceFrom" min="0" step="0.01" asp-for="Filters.PriceFrom"
                         class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
                     <label for="priceTo" class="block text-sm font-medium text-gray-700">Price To</label>
-                    <input type="number" id="priceTo" min="0" step="0.01"
+                    <input type="number" id="priceTo" min="0" step="0.01" asp-for="Filters.PriceTo"
                         class="mt-1 py-2.5 px-4 focus:ring-indigo-500 border focus:border-indigo-500 block w-full shadow-md sm:text-sm border-gray-700 ring-red-600 rounded-md">
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-1">
@@ -170,40 +172,45 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-12 w-12">
-                                        <img class="h-12 w-12 rounded-full"
+                        @foreach (var vehicle in Model.Vehicles)
+                        {
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                            <img class="h-12 w-12 rounded-full"
                                             src="https://images.unsplash.com/photo-1546518071-fddcdda7580a?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80"
-                                            alt=" Image">
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">
-                                            <a href="" class="text-gray-900">Mercedes</a>
+                                            alt="@vehicle.Name">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                <a href="" class="text-gray-900">@vehicle.Mark</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">GT</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">2 seats</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                400 hp
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                120 &euro;
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="#"
-                                    class="inline-flex justify-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    Reserve
-                                </a>
-                            </td>
-                        </tr>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@vehicle.Name</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@vehicle.Seats seats</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @vehicle.HorsePower hp
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @vehicle.Price &euro;
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <form asp-action="Create" asp-controller="Reservation" method="GET">
+                                        <input type="hidden" name="VehicleId" value="@vehicle.Id" />
+                                        <input type="submit"
+                                        class="inline-flex justify-center py-2.5 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                        value="Reserve" />
+                                    </form>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

@@ -8,7 +8,6 @@ using ViewModels;
 
 namespace RentalCar.Controllers
 {
-   [Authorize]
    public class RatingsController : BaseController
    {
       private readonly DataContext _context;

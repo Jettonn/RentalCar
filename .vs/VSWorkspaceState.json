@@ -3,10 +3,11 @@
     "",
     "\\RentalCar",
     "\\RentalCar\\Controllers",
+    "\\RentalCar\\Models",
     "\\RentalCar\\Properties",
     "\\RentalCar\\Views",
-    "\\RentalCar\\Views\\Vehicle"
+    "\\RentalCar\\Views\\Home"
   ],
-  "SelectedNode": "\\RentalCar\\Views\\Vehicle\\Details.cshtml",
+  "SelectedNode": "\\RentalCar\\Views\\Reservation",
   "PreviewInSolutionExplorer": false
 }
