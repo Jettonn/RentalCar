@@ -129,6 +129,29 @@ namespace RentalCar.Controllers
 
             return View();
         }
+        [NonAction]
+        private async Task<bool> IsTimeConflicting(ReservationViewModel reservation)
+        {
+            var reservationSchedule = await _context
+               .Reservations.Where(r => r.UserId == reservation.UserId)
+               .ToListAsync();
+
+            // Check if start time is in range of any other reservation
+            if (reservationSchedule.Any(r => r.ReservedFrom.CompareTo(reservation.ReservedFrom) < 0 &&
+                r.ReservedTo.CompareTo(reservation.ReservedFrom) > 0))
+            {
+                return true;
+            }
+
+            // Check if end time is in range of any other reservation
+            if (reservationSchedule.Any(r => r.ReservedFrom.CompareTo(reservation.ReservedTo) < 0 &&
+                r.ReservedTo.CompareTo(reservation.ReservedTo) > 0))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         [HttpGet("/EditReservation/{reservationId}")]
         public async Task<IActionResult> Edit(int reservationId)
